@@ -1,18 +1,21 @@
-# Still need to decide what webpage to use, ccsu's directory website has 5 pages
-# Next Step: Get to next page and extract emails from there
-
 import requests
 from bs4 import BeautifulSoup
 
-# sets up starting website
-url='https://directory.ccsu.edu/'
-response = requests.get(url)
+page = 2
+while page < 600:
+    # sets up starting website (eBay search for "book", starting with second page of results)
+    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw=book&_sacat=0&_pgn={page}'
+    response = requests.get(url)
 
-#Extract page 1 of Faculty Emails
-soup = BeautifulSoup(response.text, 'html.parser')  # Parse HTML
-print(soup.title) # Title Page
-emails = soup.findAll("div", class_="profile-email")  # makes list of emails
+    #Extract book titles on current page
+    soup = BeautifulSoup(response.text, 'html.parser')  # Parse HTML
+    bookTitles = soup.findAll("span", role = "heading")  # makes list of book titles
 
-# Prints all emails on page 1
-for email in emails:
-    print(email.text)
+    # Prints all titles on current page
+    print("############### Current page number: " + str(page) + " ###############")
+    print()
+    for bookTitle in bookTitles:
+        print(bookTitle.text)
+        print()
+    
+    page = page + 1
