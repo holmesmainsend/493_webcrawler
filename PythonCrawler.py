@@ -16,20 +16,19 @@ newlstt = []
 newlstp= []
 
 url = 'https://'+locations[locationsIndex]+'.craigslist.org/search/cta'
-response = requests.get(url)
-r = requests.get(url, timeout=5)
-
-soup = BeautifulSoup(response.content, 'lxml')  # Parse HTML
+headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'}
+response = requests.get(url,headers,timeout=5)
+soup = BeautifulSoup(response.content, 'lxml')  # Parse lxml
 totalItems = soup.find("span", class_='totalcount')
 while locationsIndex < 3:
     while pagen < int(totalItems.text):
         # sets up starting website (craigslist cars+trucks section, starting with first page of results)
 
-        if rp.can_fetch("*", url):
-            response = requests.get(url)
+        if rp.can_fetch(str(headers), url):
+            response = requests.get(url,headers,timeout=5)
 
             # Extract listing titles on current page
-            soup = BeautifulSoup(response.content, 'lxml')  # Parse HTML
+            soup = BeautifulSoup(response.content, 'lxml')  # Parse lxml
             posts = soup.find_all('li', class_='result-row')
 
             listingTitles = soup.findAll("a", class_='result-title hdrlnk')
@@ -37,13 +36,11 @@ while locationsIndex < 3:
 
             # Prints all titles on current page
             for y in range(0, len(listingTitles)-1):
-                print(listingTitles[y].text)
                 if listingTitles[y+1].text == listingTitles[y].text:
                     continue
                 else: newlstt.append(listingTitles[y].text)
 
             for x in range(0, len(listingPrices)-1):
-                print(listingPrices[x].text)
                 if listingPrices[x+1].text == listingPrices[x].text:
                     continue
                 else: newlstp.append(listingPrices[x].text)
