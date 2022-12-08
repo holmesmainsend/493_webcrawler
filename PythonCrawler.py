@@ -17,6 +17,7 @@ newlstp= []
 
 url = 'https://'+locations[locationsIndex]+'.craigslist.org/search/cta'
 response = requests.get(url)
+r = requests.get(url, timeout=5)
 
 soup = BeautifulSoup(response.content, 'lxml')  # Parse HTML
 totalItems = soup.find("span", class_='totalcount')
